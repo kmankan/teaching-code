@@ -24,8 +24,8 @@ const styles = {
     defaultTitle: "Warning",
   },
   meta: {
-    border: "border-l-purple-500",
-    bg: "bg-purple-500/5",
+    border: "border-l-orange-500",
+    bg: "bg-orange-500/5",
     icon: "\uD83E\uDDE0",
     defaultTitle: "Meta Moment",
   },
