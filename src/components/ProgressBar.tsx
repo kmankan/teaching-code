@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { lessons } from "@/data/lessons";
-
-const TOTAL_CHECKLIST_ITEMS = 7;
+import { CHECKLIST_STORAGE_EVENT, checklistItems } from "@/data/checklist";
 
 export default function ProgressBar() {
   const [progress, setProgress] = useState(0);
@@ -11,20 +9,20 @@ export default function ProgressBar() {
   useEffect(() => {
     function calculate() {
       let completed = 0;
-      for (let i = 0; i < TOTAL_CHECKLIST_ITEMS; i++) {
-        if (localStorage.getItem(`checklist-session-${i}`) === "true") {
+      for (const item of checklistItems) {
+        if (localStorage.getItem(`checklist-${item.id}`) === "true") {
           completed++;
         }
       }
-      setProgress((completed / TOTAL_CHECKLIST_ITEMS) * 100);
+      setProgress(checklistItems.length === 0 ? 0 : (completed / checklistItems.length) * 100);
     }
 
     calculate();
     window.addEventListener("storage", calculate);
-    const interval = setInterval(calculate, 1000);
+    window.addEventListener(CHECKLIST_STORAGE_EVENT, calculate);
     return () => {
       window.removeEventListener("storage", calculate);
-      clearInterval(interval);
+      window.removeEventListener(CHECKLIST_STORAGE_EVENT, calculate);
     };
   }, []);
 

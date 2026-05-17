@@ -1,3 +1,5 @@
+import { formatMinutes } from "@/lib/time";
+
 interface TimeBudgetProps {
   minutes: number;
 }
@@ -9,7 +11,7 @@ export default function TimeBudget({ minutes }: TimeBudgetProps) {
         <circle cx="12" cy="12" r="10" />
         <polyline points="12 6 12 12 16 14" />
       </svg>
-      {minutes} min
+      {formatMinutes(minutes)}
     </span>
   );
 }

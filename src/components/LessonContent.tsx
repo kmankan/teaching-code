@@ -7,6 +7,27 @@ import Callout from "./Callout";
 import Expandable from "./Expandable";
 import ChecklistItem from "./ChecklistItem";
 
+function renderInline(text: string): React.ReactNode {
+  const parts = text.split(/(\[([^\]]+)\]\(([^)]+)\))/g);
+  const result: React.ReactNode[] = [];
+  let i = 0;
+  while (i < parts.length) {
+    if (parts[i].startsWith("[") && i + 2 < parts.length) {
+      result.push(
+        <a key={i} href={parts[i + 2]} target="_blank" rel="noopener noreferrer"
+          className="underline underline-offset-2 hover:opacity-75">
+          {parts[i + 1]}
+        </a>
+      );
+      i += 3;
+    } else {
+      if (parts[i]) result.push(parts[i]);
+      i++;
+    }
+  }
+  return result;
+}
+
 function renderBlock(block: ContentBlock, index: number): React.ReactNode {
   switch (block.type) {
     case "paragraph":
@@ -43,7 +64,7 @@ function renderBlock(block: ContentBlock, index: number): React.ReactNode {
         return (
           <ol key={index} className="my-3 ml-6 list-decimal space-y-1.5">
             {block.items.map((item, i) => (
-              <li key={i} className="leading-relaxed">{item}</li>
+              <li key={i} className="leading-relaxed">{renderInline(item)}</li>
             ))}
           </ol>
         );
@@ -51,7 +72,7 @@ function renderBlock(block: ContentBlock, index: number): React.ReactNode {
       return (
         <ul key={index} className="my-3 ml-6 list-disc space-y-1.5">
           {block.items.map((item, i) => (
-            <li key={i} className="leading-relaxed">{item}</li>
+            <li key={i} className="leading-relaxed">{renderInline(item)}</li>
           ))}
         </ul>
       );
